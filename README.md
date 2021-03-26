@@ -6,6 +6,9 @@ For a full and detailed description of this repository, see: Renton A.I., Painte
 Angela I. Renton
 angie.renton23@gmail.com
 
+## Note! 
+This github repository contains code for the experimental task and analysis scripts. The data folders associated with these scripts are stored at [Insert Link on Publication]
+
 ## Background
 Brain-computer interface (BCI) and neurofeedback training protocols are a rapidly expanding field of study, and require accurate and reliable real-time decoding of patterns of neural activity1. These protocols often exploit selective attention, a neural mechanism to prioritise the processing of sensory inputs that either match task-relevant stimulus features (feature-based attention) or that occur at task-relevant spatial locations (spatial attention). Within the visual modality, attentional modulation of neural responses to different inputs is well indexed by steady-state visual evoked potentials (SSVEPs) evoked by frequency-tagged stimuli. These signals are reliably present in single-trial EEG data, are largely resilient to common EEG artifacts, and allow separation of neural responses to numerous concurrently presented visual stimuli. To date, efforts to use single-trial SSVEPs to classify visual attention for BCI control have largely focused on spatial- as opposed to feature-based attention. Here, we present a dataset to address this gap and to allow for the development and benchmarking of algorithms to classify feature-based attention using single-trial EEG data. The dataset includes EEG and behavioural responses from 30 healthy human participants who performed a feature-based motion-discrimination task on frequency tagged visual stimuli. The data are organised in the Brain Imaging Data Structure (BIDS).
 
