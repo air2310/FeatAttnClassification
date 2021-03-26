@@ -1,0 +1,2 @@
+# FeatAttnClassification
+This repository contains the code and data associated with the “FeatAttnClassification” project, which is aimed towards optimising the classification of feature-based attention in frequency-tagged Electroencephalography (EEG) data. For a full and detailed description of this repository, see:  Renton A.I., Painter D.R., &amp; Mattingley J.B. (2021) Optimising classification of feature-based attention in frequency-tagged electroencephalography data.
