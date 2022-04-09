@@ -9,8 +9,6 @@ function run_ML(chunk_features, chunklabels, sets, runopts, decodestring)
 %       zscore, SVM
 %       LR?,RF?
 
-
-
 %% Run!
 disp(['Running: ' decodestring])
 
@@ -33,13 +31,20 @@ for ii_chunk = 1:sets.n.chunksizes % Sliding window size.
             
             
             % Partition data
+            n.epochs = length(candidate_labels.test);
+            n.trials = length(unique(candidate_labels.train_trial));
             if runopts.testdat ~= runopts.traindat
                 partition = "all";
                 nfold = 1;
-                n.epochs = length(candidate_labels.test);
             else
-                n.epochs = length(candidate_labels.train);
-                partition = cvpartition(n.epochs,'KFold',sets.n.folds);
+                
+                trials = unique(candidate_labels.train_trial);
+                triallabels = NaN(length(trials),1);
+                for ii = 1:length(trials)
+                    triallabels(ii) = mean(candidate_labels.train(candidate_labels.train_trial == trials(ii)));
+                end
+                
+                partition = cvpartition(sum(triallabels==1),'KFold',sets.n.folds);
                 nfold = sets.n.folds;
             end
             
@@ -61,7 +66,7 @@ for ii_chunk = 1:sets.n.chunksizes % Sliding window size.
                     y_predict = predict( classifier, features.test' )';
                     
                 elseif strcmp(decodestring, 'KNN')
-                    classifier = fitcknn( features.train', labels.train);%,'Distance', 'spearman', 'OptimizeHyperparameters', {'NumNeighbors'}); 
+                    classifier = fitcknn( features.train', labels.train,'NumNeighbors',floor(length(candidate_labels.train)/n.trials));%,'Distance', 'spearman', 'OptimizeHyperparameters', {'NumNeighbors'}); 
                     y_predict = predict( classifier, features.test' )';
                     
                 elseif strcmp(decodestring, 'SVM')
@@ -98,6 +103,7 @@ for ii_chunk = 1:sets.n.chunksizes % Sliding window size.
             end
             
             % Store mean accuracy for conditions. 
+            n.epochs = sum(~isnan(ACCURACY.(sets.str.HzState{ii_hzstate}){ii_col, ii_chunk}));
             ACCMEAN(ii_col, ii_chunk, ii_hzstate) = 100*sum( ACCURACY.(sets.str.HzState{ii_hzstate}){ii_col, ii_chunk})/n.epochs;
             disp(['Accuracy = ' num2str(ACCMEAN(ii_col, ii_chunk, ii_hzstate))])
             

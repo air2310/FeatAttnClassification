@@ -63,7 +63,7 @@ for ii_train = 1:sets.n.traintypes
     % limits
     switch ii_train
         case 1
-            ylim([48 85])
+            ylim([49 60])
         case 2
             ylim([49 60])
     end
@@ -89,9 +89,9 @@ h = figure; hold on;
 % cond 1
 for ii_train = 1:sets.n.traintypes
     DAT = squeeze(nanmean(nanmean(nanmean(ACCMEAN(:,:,:,:,:,ii_train), 2),3),5));
-    [~, ~, CI, ~] = ttest(DAT(1,:)) % 61.7898   63.5177 | 51.1662   53.4874
-    [~, ~, CI, ~] = ttest(DAT(2,:)) % 62.0946   63.9584 | 51.9324   54.0140
-    [~, p, ~, stats] = ttest(DAT(1,:), DAT(2,:)) %p = 0.1736, t =  -1.3949 | p = 0.1018, t = -1.6896
+    [~, ~, CI, ~] = ttest(DAT(1,:)) % 51.9449   54.4883 | 51.1371   53.4881 
+    [~, ~, CI, ~] = ttest(DAT(2,:)) % 52.3066   55.0202 | 51.9596   54.0993 
+    [~, p, ~, stats] = ttest(DAT(1,:), DAT(2,:)) %p = 0.2608, t = -1.1468 | p = 0.0757, t(29) =  -1.8423 | 
     clear data
     data{1} = DAT(1,:);
     data{2} = DAT(2,:);
@@ -101,7 +101,7 @@ end
 
 % plot settings
 % legend(sets.str.trainstrings)
-xlim([40 75])
+xlim([45 70])
 set(gca, 'FontName', 'arial',  'LineWidth', 3, 'tickdir', 'out', 'box','off', 'Yticklabel', sets.str.colcond)
 ylabel('Flicker Condition')
 xlabel('Accuracy (%)')
@@ -185,7 +185,7 @@ for ii_train = 1:sets.n.traintypes
         end
         
         % limits
-        ylim([48 100])
+        ylim([48 70])
         line([0 4], [50 50],'LineWidth', 3, 'Color', [0 0 0])
         set(gca, 'FontName', 'arial',  'LineWidth', 3, 'tickdir', 'out')
         set(gca, 'FontName', 'arial',  'LineWidth', 3)
@@ -241,7 +241,7 @@ for ii_train = 1:sets.n.traintypes
 end
 % limits
 
-ylim([48 100])
+ylim([48 70])
 
 line([0 4], [50 50],'LineWidth', 3, 'Color', [0 0 0])
 set(gca, 'FontName', 'arial',  'LineWidth', 3, 'tickdir', 'out')
@@ -290,9 +290,9 @@ for ii_train = 1:sets.n.traintypes
     % limits
     switch ii_train
         case 1
-            ylim([48 100])
+            ylim([48 70])
         case 2
-            ylim([49.6 60])
+            ylim([48 70])
     end
     
     
@@ -319,7 +319,7 @@ str.HzstateMetricsMixed = {'MLP - Multi' 'LDA - Multi'    'KNN - Multi' 'SVM - M
 h = figure; hold on;
 for ii_train = 1:sets.n.traintypes
     % Get data to plot
-    datplot = squeeze(nanmean(ACCMEAN(:, end, :, :, :,ii_train) , 1));
+    datplot = squeeze(nanmean(nanmean(ACCMEAN(:, [3 4 5], :, :, :,ii_train) , 1),2));
     
     % Get mean
     M = squeeze(nanmean(datplot,2));
@@ -342,7 +342,8 @@ for ii_train = 1:sets.n.traintypes
 end
 
 set(gca, 'xtick', 1:4,  'xticklabel', sets.str.HzState,'tickdir', 'out')
-xlim([0 5])
+xlim([0.5 4.5])
+ylim([50 62])
 set(gca, 'FontName', 'arial',  'LineWidth', 3)
 box('off')
 
@@ -359,7 +360,7 @@ saveas(h, [sets.direct.results_group tit  '.eps'], 'epsc')
 
 %% Hzstatedat individual differences
 ii_train = 1;
-datplot = squeeze(nanmean(ACCMEAN(:, end, :, :, :,1) , 1));
+datplot = squeeze(nanmean(ACCMEAN(:, end, :, :, 2,1) , 1));
 LStyles = {'-' '--'};
 
 H = figure;
@@ -367,7 +368,7 @@ hold on
 ALL_Ms = [];
 for SS = 1:30
     
-    dat = squeeze(nanmean(datplot(: , SS, :),3));%squeeze(HZSTATEDAT(AA,ii,:, SS));
+    dat = squeeze(datplot(: , SS));%squeeze(HZSTATEDAT(AA,ii,:, SS));
     [M1, maxi(SS)] = max(dat);
     M2 = dat(4);%min(dat);
     M = [ M1 M2];
@@ -386,18 +387,18 @@ set(gca, 'FontName', 'arial',  'LineWidth', 3)
 box('off')
 
 % range
-% min(ALL_Ms) =    79.8934   63.6126
-% max(ALL_Ms) =    94.5752   89.2455
-% mean(ALL_Ms) =  84.7161   72.2269
+% min(ALL_Ms) =     52.3371   49.1200
+% max(ALL_Ms) =    90.8908   85.1612
+% mean(ALL_Ms) = 66.7995   60.2456
+% std(ALL_Ms)= 9.5182    8.1361
 
 % [~,p,~,stats] = ttest(ALL_Ms(:,1), ALL_Ms(:,2))
-% p =   0
-%  tstat: 21.5630
+% p =   2.4217e-11
+%     tstat: 10.4476
 %        df: 29
-%        sd: 3.1724
+%        sd: 3.4359
 [sum(maxi==1) sum(maxi==2) sum(maxi==3) sum(maxi==4)]
-%  0     1     8    21
-%  8    18     3     1
+% 15    14     0     1
 
 %% Find timepoints that are significantly greater than chance
 
@@ -432,10 +433,10 @@ saveas(h, [sets.direct.results_group tit  '.eps'], 'epsc')
 
 
 %% Plot group result
-
-datplot = squeeze(nanmean(nanmean(ACCMEAN(:, :, 4, :, :, :) ,1),2));
+chunksizesuse = [3:5];
+datplot = squeeze(nanmean(nanmean(nanmean(ACCMEAN(:, chunksizesuse, [1 2], :, :, :) ,1),2),3));
 datplot(:, 5, :) = squeeze(nanmean(nanmean(ACCMEAN(:, :, 1, :, 5, :) ,1),2));
-datplot = datplot(:, [5 6 1 2 3 4], :);
+datplot = datplot(:, [5 6 3 1  4 2], :);
 
 % Get mean
 M = squeeze(nanmean(datplot,1));
@@ -448,10 +449,10 @@ h = figure;
 [~,hE] = barwitherr(E',M, 'LineWidth', 3);
 set(hE, 'CapSize', 10, 'linewidth', 3)
 
-set(gca, 'xticklabel',{ 'zscore' 'LR_L2' 'MLP' 'LDA' 'KNN' 'SVM'}, 'tickdir', 'out', 'LineWidth', 3)
+set(gca, 'xticklabel',{ 'zscore' 'KNN' 'MLP' 'LR_L2'  'SVM' 'LDA'  }, 'tickdir', 'out', 'LineWidth', 3)
 box('off')
 
-ylim([48 100])
+ylim([49 70])
 legend(sets.str.trainstrings, 'location', 'NorthWest')
 colormap([1 1 1; 0 0 0])
 line([0 7], [50 50], 'color', 'r', 'linewidth', 3)
@@ -467,10 +468,10 @@ saveas(h, [sets.direct.results_group tit  '.eps'], 'epsc')
 
 
 %% Plot group result - raincloud
-
-datplot = squeeze(nanmean(nanmean(ACCMEAN(:, :, 4, :, :, :) ,1),2));
+chunksizesuse = [3:5];
+datplot = squeeze(nanmean(nanmean(nanmean(ACCMEAN(:, chunksizesuse, [1 2], :, :, :) ,1),2),3));
 datplot(:, 5, :) = squeeze(nanmean(nanmean(ACCMEAN(:, :, 1, :, 5, :) ,1),2));
-datplot = datplot(:, [5 6 1 2 3 4], :);
+datplot = datplot(:, [5 6 3 1  4 2], :);
 
 % Create figure
 h = figure; hold on;
@@ -488,7 +489,7 @@ for ii_train = 1:sets.n.traintypes
 end
 
 
-set(gca, 'yticklabel',{'SVM' 'KNN' 'LDA' 'MLP' 'LR' 'zscore'}, 'tickdir', 'out', 'LineWidth', 3)
+set(gca, 'yticklabel',{'LDA' 'SVM'   'MLP' 'KNN' 'LR'  'zscore'}, 'tickdir', 'out', 'LineWidth', 3)
 box('off')
 
 
@@ -509,7 +510,7 @@ print(h,'-painters', '-depsc', [sets.direct.results_group  tit '.eps'])
 %% stats on big interaction
 % 3 way anova
 % data
-datplot = squeeze(nanmean(nanmean(ACCMEAN(:, :, :, :, :, :) ,1),3));
+datplot = squeeze(nanmean(nanmean(ACCMEAN(:, :, [1 2], :, :, :) ,1),3));
 ACC = [];
 
 % factors
@@ -542,25 +543,29 @@ for AA = 1:n.multistates
 end
 
 varnames = {'TRAINTYPE';'ALGORITHM';'WINDOW'};
-anovan(ACC,{TRAINTYPE ALGORITHM WINDOW},3,3,varnames)
+[p,tbl,stats,terms] = anovan(ACC,{TRAINTYPE ALGORITHM WINDOW},3,3,varnames)
 
-% partialetasquared = SS(effect)/ SS(effect) + SS(Error)
-% for 3 way interaction
-eta_p = 11830.5/(11830.5+22370.2) % = 0.3459
-% 2 way traintype by window
-eta_p = 21298.8/(21298.8+22370.2) % = 0.4877
-% 2 way traintype by algorithm
-eta_p = 41769.5/(41769.5+22370.2) % = 0.6512
-% for sliding window
-eta_p = 46493/(46493+22370.2) % = 0.6752
-% for training type
-eta_p = 46727.4/(46727.4+22370.2) % =  0.6763
+% Partial Eta Squared!
+% https://www.frontiersin.org/articles/10.3389/fpsyg.2013.00863/full
 
+% Get all the sums of squares
+tbl{5,1} = 'TRAINTYPE_ALGORITHM'
+tbl{6,1} = 'TRAINTYPE_WINDOW'
+tbl{7,1} = 'ALGORTHM_WINDOW'
+tbl{8,1} = 'TRAINTYPE_ALGORITHM_WINDOW'
+for N = 2:9
+    SSS.(tbl{N,1}) = tbl{N,2}
+end
+
+% Get all the sums of squares
+for N = 2:9
+    partialetasquared.(tbl{N,1}) = SSS.(tbl{N,1}) / (SSS.(tbl{N,1}) + SSS.Error)
+end
 
 % Overall effect of training type
 datuse = squeeze(nanmean(nanmean(datplot,1), 3))
-M = mean(datuse) % 62.8401   52.6500
-SD = std(datuse) % 2.2924    2.7599
+M = mean(datuse) % 54.0740   52.9148
+SD = std(datuse) % 3.6125    2.9084
 
 
 %% Power calcs
@@ -604,7 +609,7 @@ bs_std = sqrt(mean(std(x))^2 - ws_std^2/n_trials)
 % 3 way anova
 % data
 ii_train = 2
-datplot = squeeze(nanmean(nanmean(nanmean(ACCMEAN(:, :, :, :, :, ii_train) ,1),3),5));
+datplot = squeeze(nanmean(nanmean(nanmean(ACCMEAN(:, :, [1 2], :, :, ii_train) ,1),3),5));
 ACC = [];
 
 % factors
@@ -630,14 +635,14 @@ varnames = {'WINDOW'};
 anovan(ACC,{WINDOW},3,3,varnames)
 
 % Multifreq
-%   Source   Sum Sq.   d.f.   Mean Sq.     F       Prob>F
-% ---------------------------------------------------------
-%   WINDOW   10878.6     4    2719.65    334.8   3.8769e-72
-%   Error     1177.9   145       8.12
-%   Total    12056.5   149
+%   Source   Sum Sq.   d.f.   Mean Sq.     F       Prob>F   
+% ----------------------------------------------------------
+%   WINDOW   1725.19     4    431.297    20.76   1.52589e-13
+%   Error    3013.07   145     20.78                        
+%   Total    4738.26   149                                  
 
 % partialetasquared = SS(effect)/ SS(effect) + SS(Error)
-eta_p = 10878.6/(10878.6+1177.9) % = 0.9023
+eta_p = 1725.19/(4738.26) % = 0.9023
 
 % % Overall effect of window
 M = mean(datplot') % 54.1077   55.5478   59.3866   68.6072   76.5515
@@ -646,22 +651,22 @@ SD = std(datplot') % 0.9913    1.6527    2.4602    3.6230    4.2099
 % SingleFReq
 
 % Multifreq
-%   Source   Sum Sq.   d.f.   Mean Sq.    F       Prob>F
+%   Source   Sum Sq.   d.f.   Mean Sq.    F       Prob>F   
 % ---------------------------------------------------------
-%   WINDOW    420.03     4    105.008    9.25   1.09459e-06
-%   Error    1645.61   145     11.349
-%   Total    2065.64   149
+%   WINDOW    474.46     4    118.615    9.49   7.67428e-07
+%   Error    1812.76   145     12.502                      
+%   Total    2287.22   149                                 
 
 % partialetasquared = SS(effect)/ SS(effect) + SS(Error)
-eta_p = 420.03/(420.03+1645.61) % = 0.2033
+eta_p = 474.46/(2287.22) % = 0.2033
 
 % % Overall effect of window
 M = mean(datplot') %  50.4992   51.3190   52.4079   53.9591   55.0649
 SD = std(datplot') % 0.5957    1.5723    2.6576    4.2108    5.3967
 
 %% Get average trajectory over chunk size increase
-
-dat = squeeze(nanmean(nanmean(nanmean(nanmean(ACCMEAN(:, :, :, :, :, 2) ,1),3), 5),6));
+ii_train=2
+dat = squeeze(nanmean(nanmean(nanmean(nanmean(ACCMEAN(:, :, [1 2], :, :, ii_train) ,1),3), 5),6));
 
 figure; plot(sets.timing.secs.chunksizes , mean(dat'), 'x-')
 
@@ -669,10 +674,12 @@ figure; plot(sets.timing.secs.chunksizes , mean(dat'), 'x-')
 x = sets.timing.secs.chunksizes;
 y =  mean(dat')'; % y(1) = [];
 
+[~,~,CI,~] = ttest(dat')
+y=CI(1,:)'
 myfittype=fittype('a*(1-exp(-b*(x-c)))',...
     'dependent', {'y'}, 'independent',{'x'},'coefficients', {'a' 'b' 'c'});
 
-myfit=fit(x',y,myfittype,'StartPoint',[80 0.5 0.5]);
+myfit=fit(x',y,myfittype,'StartPoint',[50 0.5 0.5]);
 
 % Asymptote
 myfit.a
@@ -695,8 +702,10 @@ plot(x,y, 'g-x')
 %% stats on Algorithm
 % 3 way anova
 % data
-ii_train = 1
-datplot = squeeze(nanmean(nanmean(nanmean(ACCMEAN(:, :, :, :, :, ii_train) ,1),2),3))';
+ii_train = 2
+% datplot = squeeze(nanmean(nanmean(nanmean(ACCMEAN(:, :, [1 2], :, :, ii_train) ,1),2),3))';
+datplot = squeeze(nanmean(nanmean(nanmean(ACCMEAN(:, [3 4 5], [1 2], :, :, ii_train) ,1),2),3))';
+
 ACC = [];
 
 % factors
@@ -720,47 +729,42 @@ end
 varnames = {'ALGORITHM'};
 anovan(ACC,{ALGORITHM},3,3,varnames)
 return
-% Multifreq
-%   Source      Sum Sq.   d.f.   Mean Sq.     F        Prob>F
-% --------------------------------------------------------------
-%   ALGORITHM   17181.4     5    3436.28    440.54   9.21293e-97
-%   Error        1357.2   174       7.8
-%   Total       18538.6   179
-% partialetasquared = SS(effect)/ SS(effect) + SS(Error)
-eta_p = 17181.4/(17181.4+1357.2) % = 0.9268
 
-% % Overall effect of window
-M = mean(datplot') %  57.4676   61.8795   67.8344   81.7302   52.1765   55.9526
-SD = std(datplot') %  3.0250    3.5546    1.2379    2.2676    3.2194    2.8244
+% partialetasquared = SS(effect)/ SS(effect) + SS(Error)
+eta_p = 914.64/(6568.96) % = 0.139
+
+% % Overall effect of algorithm
+% sets.str.methods =   {'MLP'}    {'LDA'}    {'KNN'}    {'SVM'}    {'zscore'}    {'LR_L2'}
+M = mean(datplot') %  56.2349   60.5793   55.5472   56.8406   53.1512   55.1102
+SD = std(datplot') %    5.7614    7.0975    5.1304    5.7245    4.7186    5.4821
 
 % SingleFreq
-
-% Multifreq
-%   Source      Sum Sq.   d.f.   Mean Sq.    F    Prob>F
-% ------------------------------------------------------
-%   ALGORITHM     65.14     5    13.0273    1.6   0.1621
-%   Error       1415.31   174     8.134
-%   Total       1480.45   179
+% 
+%   Source      Sum Sq.   d.f.   Mean Sq.    F     Prob>F
+% -------------------------------------------------------
+%   ALGORITHM    120.57     5    24.1141    1.25   0.2862
+%   Error       3346.67   174    19.2338                 
+%   Total       3467.24   179                                                   
 %
 % partialetasquared = SS(effect)/ SS(effect) + SS(Error)
-eta_p = 65.14/(65.14+1415.31) % = 0.0440
+eta_p = 120.57/(3467.24) % = 0.0348
 
 % % Overall effect of window
-M = mean(datplot') %   52.5908  83 53.8297   52.1121   52.8865   52.0223   52.4586
-SD = std(datplot') % 2.6103    3.2682    2.3451    2.8236    3.1412    2.8230
+M = mean(datplot') %    52.8708   53.9904   52.7746   53.1834   51.9938   52.6758
+SD = std(datplot') % 2.7432    3.3598    2.8855    2.8467    3.1132    3.0154
 
 % test against chance
 [~,p, CI, stats] = ttest(mean(datplot), 50)
-% p =1.2343e-05
-% CI =51.6195   53.6806
-%     tstat: 5.2592
+% p =9.5211e-06
+% CI =52.5640   55.7351
+%     tstat: 5.3526
 %        df: 29
-%        sd: 2.7599
-mean(mean(datplot)) %52.6500
+%        sd: 4.2462
+mean(mean(datplot)) %54.1496
 
 %% Get multifreq ordered performance
 ii_train = 1
-datplot = squeeze(nanmean(nanmean(nanmean(ACCMEAN(:, :, :, :, :, ii_train) ,1),2),3))';
+datplot = squeeze(nanmean(nanmean(nanmean(ACCMEAN(:, [3 4 5], [1 2], :, :, ii_train) ,1),2),3))';
 order = [4 3 2 1 6 5]
 
 % classifier
@@ -769,20 +773,18 @@ sets.str.methods{order}
 
 % Means
 mean(datplot(order, :)')
-%    81.7302   67.8344   61.8795   57.4676   55.9526   52.1765
+%     56.8406   55.5472   60.5793   56.2349   55.1102   53.1512
 
 % Stats
 for ii = 1:6
     disp(sets.str.methods{order(ii)})
-    [~,p, CI, stats] = ttest(datplot(order(ii), :)',datplot(order(end), :)')
+    [~,p, ~, stats] = ttest(datplot(order(ii), :)',datplot(order(end), :)')
+    [~,~, CI, ~] = ttest(datplot(order(ii), :)')
 end
-% p =    8.4508e-29    2.5818e-23    2.3101e-19   4.3807e-14    2.8185e-11
-% 
-% CI =
-%    80.8834   67.3721   60.5522   56.3381   54.8979   
-%    82.5769   68.2966   63.2068   58.5972   57.0072  
-%    
-%     tstat: [ 46.5282 29.8287 21.4938 13.5626 10.3791 ]
+% p =    3.1755e-05  0.0010  6.0804e-09  2.3927e-04   0.0046
+%     tstat: [ 4.9192 3.6533  8.1094   4.1885   3.0733 ]
+
+
 
        
 
@@ -801,7 +803,7 @@ mean(mean(datplot)) % 52.6920
 [~,p, CI, stats] = ttest(mean(datplot)) % CI 52.1647   53.2192
 
 %% Prepare max accuacy table
-ii_train = 1
+ii_train = 2
 order = [5 2 6 4 1 3]
 sets.str.methods{order}
 dat = squeeze(nanmean(ACCMEAN(:, end, :, :, order, ii_train) ,1));
@@ -860,7 +862,7 @@ anovan(ACC,{TRAINTYPE ALGORITHM HZSTATE},3,3,varnames)
 %% stats on Hzstate results
 % 3 way anova
 % data
-datplot = squeeze(nanmean(nanmean(nanmean(ACCMEAN(:, :, :, :, [ 1 2 3 4 6], :) ,1),2),5));
+datplot = squeeze(nanmean(nanmean(nanmean(ACCMEAN(:, [3 4 5], :, :, [ 1 2 3 4 6], :) ,1),2),5));
 ACC = [];
 
 % factors
@@ -889,11 +891,11 @@ end
 varnames = {'TRAINTYPE';'HZSTATE'};
 [p,tbl,stats,terms] = anovan(ACC,{TRAINTYPE HZSTATE},3,3,varnames)
 
-
-varnames = {'HZSTATE'};
-[p,tbl,stats,terms] = anovan(ACC(1:120),{HZSTATE(1:120)},3,3,varnames)
-varnames = {'HZSTATE'};
-[p,tbl,stats,terms] = anovan(ACC(121:240),{HZSTATE(121:240)},3,3,varnames)
+% 
+% varnames = {'HZSTATE'};
+% [p,tbl,stats,terms] = anovan(ACC(1:120),{HZSTATE(1:120)},3,3,varnames)
+% varnames = {'HZSTATE'};
+% [p,tbl,stats,terms] = anovan(ACC(121:240),{HZSTATE(121:240)},3,3,varnames)
 
 % report - no main effect or interaction with Hzstate - therefore no more
 % follow up
@@ -902,6 +904,7 @@ varnames = {'HZSTATE'};
 % https://www.frontiersin.org/articles/10.3389/fpsyg.2013.00863/full
 
 % Get all the sums of squares
+clear SSS partialetasquared
 tbl{4,1} = 'TRAINTYPE_HZSTATE'
 for N = 2:5 
     SSS.(tbl{N,1}) = tbl{N,2}

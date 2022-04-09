@@ -11,7 +11,8 @@ end
 
 % Get training labels and featues.
 keep.stimstate = labels_tmp.stimstate==runopts.traindat;
-labels.train = labels_tmp.hzcued(keep.stimstate & keep.noise & keep.col);
+labels.train =       labels_tmp.hzcued(keep.stimstate & keep.noise & keep.col);
+labels.train_trial = labels_tmp.trial(keep.stimstate & keep.noise & keep.col);
 features.train = features_tmp(:,keep.stimstate & keep.noise & keep.col);
 
 % Get testing labels and featues.
@@ -30,6 +31,7 @@ if sum(labels.train==1) ~= sum(labels.train==2)
     
     tmp = randsample(find(labels.train==longer_idx), longer-shorter);
     labels.train(tmp) = [];
+    labels.train_trial(tmp) = [];
     features.train(:,tmp) = [];
    
 end
