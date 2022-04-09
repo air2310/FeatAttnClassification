@@ -34,18 +34,18 @@ Please see the data descriptor [insert link] for a detailed description of the e
 
 ## AnalysisScripts
 We designed the current study to create a dataset that would allow the scientific community to design and benchmark different approaches to real-time feature-based attention classification. To validate the suitability of this dataset for this purpose, we compared the efficacy of 6 different algorithms for classifying the target of feature-based attention, using different combinations of training features. 
-A number of different approaches were used to discriminate which feature participants were attending to using short latency single-trial EEG data from a low density electrode array positioned over the posterior scalp. These included a Z-score difference approach, Linear Discriminant Analysis, Multi-Layer Perceptron, K-Nearest Neighbours and Canonical Correlation Analysis. 
+A number of different approaches were used to discriminate which feature participants were attending to using short latency single-trial EEG data from a low density electrode array positioned over the posterior scalp. These included a Z-score difference approach, Linear Discriminant Analysis, Multi-Layer Perceptron, K-Nearest Neighbours, L2 Regularised Linear Regression and Support Vector Machines. 
 
 The scripts used to run these analyses are stored in “FeatAttnClassification\AnalysisScripts\”. See the MainAnalysisScript (MATLAB live document) for an interactive outline of our approach. This is available as a MATLAB live script, as well as as a PDF and HTML document. 
 
 Please see the data descriptor [insert link] for a detailed description of the analysis approach.
 
 ## Results
-The results folder contains the files output by individual subject analyses (see AnalysisScripts folder). These individual data files are used to run the “collateResults2.m” script, which creates group aggregate plots and calculates statistical tests. 
+The results folder contains the files output by individual subject analyses (see AnalysisScripts folder). These individual data files are used to run the “Aggregate_Decoding.m” script, which creates group aggregate plots and calculates statistical tests. 
 Please see the data descriptor [insert link] for a detailed description of these collated results and the contents of the Results Folder. 
 Usage Notes
 
-EEG data is stored in the brain vision format. If using MATLAB, we recommend using the Fieldtrip Toolbox (https://www.fieldtriptoolbox.org/). See “FeatAttnClassification\AnalysisScripts\MainAnalysisScript.mlx” or “FeatAttnClassification\AnalysisScripts\Main4.m” and specifically the “function” “FeatAttnClassification\AnalysisScripts\Functions\getEEGBIDS.m” for a specific example of how to load these data in MATLAB. To load the EEG data in python, we recommend the MNE-python package (https://mne.tools/stable/index.html)
+EEG data is stored in the brain vision format. If using MATLAB, we recommend using the Fieldtrip Toolbox (https://www.fieldtriptoolbox.org/). See “FeatAttnClassification\AnalysisScripts\MainDecoding.mlx” or “FeatAttnClassification\AnalysisScripts\MainDecoding.m” and specifically the “function” “FeatAttnClassification\AnalysisScripts\Functions\get_eeg.m” for a specific example of how to load these data in MATLAB. To load the EEG data in python, we recommend the MNE-python package (https://mne.tools/stable/index.html)
 
 Behavioural data are stored in “.mat” files. This native MATLAB format can easily be read into MATLAB using the load function. Alternatively, if using Python, the files are HDF5 formatted and can be read using h5py. 
 
